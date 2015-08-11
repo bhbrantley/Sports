@@ -1,2 +1,2 @@
 # Sports
-Package for building sports related R script
+Building sports related R scripts and analyses
