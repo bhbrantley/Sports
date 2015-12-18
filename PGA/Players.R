@@ -142,6 +142,33 @@ get_scoring <- function(site = "http://www.pgatour.com/stats/stat.02415.html"){
   return(df)
 }
 
+#### Scrape PGA website for stats on Scoring Average      -----------------------------------------------------------------------
+# Source: "http://www.pgatour.com/stats/stat.120.html"
+# 'site' is the PGA website link to the page
+# requires get_player_name() function
+get_strokes <- function(site = "http://www.pgatour.com/stats/stat.120.html"){
+  # Get players name
+  player <- get_player_name(site)
+  # Number of rounds per player
+  rounds <- scrape(paste(site), ".hidden-small:nth-child(4)", "Rounds")
+  # Avg score
+  avg_score <- scrape(paste(site), ".hidden-small:nth-child(5)", "AvgScore")
+  # Total Strokes
+  total_strokes <- scrape(paste(site), ".hidden-small:nth-child(6)", "Total Strokes")
+  # Total Adjustment
+  adjustment <- scrape(paste(site), ".hidden-small:nth-child(7)", "Adjustment")
+  # Create df
+  df <- inner_join(player, rounds) %>%
+    inner_join(., avg_score) %>%
+    inner_join(., total_strokes) %>%
+    inner_join(., adjustment)
+  df[is.na(df)] <- 0
+  print("Preview of Scoring Average output")
+  print(names(df))
+  print(head(df))
+  return(df)
+}
+
 #### Method to add two scrapes                          -----------------------------------------------------------------------
 # 'x' is a function or df
 # 'y' is a function or df
